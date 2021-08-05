@@ -1,5 +1,7 @@
 const URL_MENSAGENS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages"
 
+const usuario = prompt("Qual é o seu nome?");
+
 let mensagens;
 
 function carregarMensagens() {
