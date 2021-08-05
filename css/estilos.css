@@ -1,7 +1,5 @@
 body {
     background-color: #F3F3F3;
-    font-size: 30px;
-    font-weight: 400;
 }
 
 .topo {
@@ -76,14 +74,17 @@ body {
 }
 
 .rodape input {
+    font-family: 'Roboto', sans-serif;
     width: calc(100% - 30px);
     height: 100%;
     border: none;
     color: #000000;
     font-size: 18px;
+    resize: none;
+    vertical-align: middle;
 }
 
-.rodape input::-webkit-input-placeholder {
+.rodape input::placeholder {
     color: #000000;
     font-style: italic;
 }
