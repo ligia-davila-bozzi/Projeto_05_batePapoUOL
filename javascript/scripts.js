@@ -1,6 +1,25 @@
-const URL_MENSAGENS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages"
+const URL_MENSAGENS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
+const URL_USUARIOS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 
-const usuario = prompt("Qual é o seu nome?");
+function entrar() {
+    const usuario = prompt("Qual é o seu nome?");
+
+    const requisicao = axios.post(URL_USUARIOS, {name: usuario});
+    requisicao.then(carregarMensagens);
+    requisicao.catch(tratarErroLogin);
+}
+
+function tratarErroLogin(erro) {
+    if ( erro.response.status === 400 ) {
+        alert("Usuário já está logado!");
+        entrar();
+    }
+    else {
+        alert("Outro erro!");
+    }
+}
+
+entrar();
 
 let mensagens;
 
@@ -34,7 +53,5 @@ function renderizarMensagens(objeto) {
         }
     }
 }
-
-carregarMensagens();
 
 setInterval(carregarMensagens, 3000);
