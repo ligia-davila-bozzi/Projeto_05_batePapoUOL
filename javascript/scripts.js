@@ -34,3 +34,5 @@ function renderizarMensagens(objeto) {
 }
 
 carregarMensagens();
+
+setInterval(carregarMensagens, 3000);
