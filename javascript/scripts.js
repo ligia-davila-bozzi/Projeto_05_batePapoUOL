@@ -8,7 +8,7 @@ let user;
     user = prompt("Qual é o seu nome?");
 
     const request = axios.post(URL_USERS, {name: user});
-    request.then(loadMesages);
+    request.then(loadMessages);
     request.catch(errorWarning);
 }
 
@@ -37,7 +37,7 @@ function renderMessages() {
     content.innerHTML = "";
 
     for ( let i = 0; i<messages.length; i++) {
-        if ( messages[i].type === "private_message" && messages[i].to === user ) {
+        if ( messages[i].type === "private_message" && (messages[i].to === user || messages[i].from === user) ) {
             content.innerHTML += `<div class="message private"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> reservadamente para <span class="name">${messages[i].to}</span>: ${messages[i].text}</div>`
         }
         else if ( messages[i].type === "status" ) {
@@ -55,15 +55,13 @@ function getMessages(object) {
     renderMessages();
 }
 
-function loadMesages() {
+function loadMessages() {
     const promise = axios.get(URL_MESSAGES);
 
     promise.then(getMessages);
     promise.catch(function () {
         alert("Ocorreu algum erro, tente novamente!")
     })
-
-    //const 
 }
 
-setInterval(loadMesages, 3000);
+setInterval(loadMessages, 3000);
