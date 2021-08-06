@@ -1,64 +1,69 @@
-const URL_MENSAGENS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
-const URL_USUARIOS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
+const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
+const URL_USERS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status"
 
-let usuario;
+let user;
 
-/*function entrar() {
-    usuario = prompt("Qual é o seu nome?");
+/*function login() {
+    user = prompt("Qual é o seu nome?");
 
-    const request = axios.post(URL_USUARIOS, {name: usuario});
-    request.then(carregarMensagens);
-    request.catch(tratarErroLogin);
+    const request = axios.post(URL_USERS, {name: user});
+    request.then(loadMesages);
+    request.catch(errorWarning);
 }
 
-function tratarErroLogin(erro) {
-    if ( erro.response.status === 400 ) {
-        alert("Tente outro nome!");
-        entrar();
+function errorWarning(error) {
+    if ( error.response.status === 400 ) {
+        alert("Nome já em uso, tente outro nome!");
+        login();
     }
     else {
-        alert("Outro erro!");
+        alert("Tente novmente!");
     }
 }
 
-entrar();
+login();
 
-function atualizarStatus() {
-    const request = axios.post(URL_STATUS, {name: usuario});
+function sendStatus() {
+    const request = axios.post(URL_STATUS, {name: user});
 }
 
-setInterval(atualizarStatus, 5000);*/
+setInterval(sendStatus, 5000);*/
 
-let mensagens;
+let messages;
 
-function renderizarMensagens(objeto) {
-    const conteudo = document.querySelector(".conteudo");
-    conteudo.innerHTML = "";
+function renderMessages() {
+    const content = document.querySelector(".content");
+    content.innerHTML = "";
 
-    for ( let i = 0; i<mensagens.length; i++) {
-        if ( mensagens[i].type === "private_message" && mensagens[i].to === usuario ) {
-            conteudo.innerHTML += `<div class="mensagem reservada"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> reservadamente para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
+    for ( let i = 0; i<messages.length; i++) {
+        if ( messages[i].type === "private_message" && messages[i].to === user ) {
+            content.innerHTML += `<div class="message private"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> reservadamente para <span class="name">${messages[i].to}</span>: ${messages[i].text}</div>`
         }
-        else if ( mensagens[i].type === "status" ) {
-            conteudo.innerHTML += `<div class="mensagem status"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> ${mensagens[i].text}</div>`
+        else if ( messages[i].type === "status" ) {
+            content.innerHTML += `<div class="message status"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> ${messages[i].text}</div>`
         }
         else {
-            conteudo.innerHTML += `<div class="mensagem"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
+            content.innerHTML += `<div class="message"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> para <span class="name">${messages[i].to}</span>: ${messages[i].text}</div>`
         }
     }
 }
 
-function buscarMensagens(objeto) {
-    mensagens = objeto.data;
+function getMessages(object) {
+    messages = object.data;
     
-    renderizarMensagens();
+    renderMessages();
 }
 
-function carregarMensagens() {
-    const promise = axios.get(URL_MENSAGENS);
+function loadMesages() {
+    const promise = axios.get(URL_MESSAGES);
 
-    promise.then(buscarMensagens);
+    promise.then(getMessages);
+    promise.catch(function () {
+        alert("Ocorreu algum erro, tente novamente!")
+    })
+
+    //const 
 }
 
-setInterval(carregarMensagens, 3000);
+setInterval(loadMesages, 3000);
