@@ -4,7 +4,7 @@ const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/statu
 
 let user;
 
-/*function login() {
+function login() {
     user = prompt("Qual é o seu nome?");
 
     const request = axios.post(URL_USERS, {name: user});
@@ -28,12 +28,13 @@ function sendStatus() {
     const request = axios.post(URL_STATUS, {name: user});
 }
 
-setInterval(sendStatus, 5000);*/
+setInterval(sendStatus, 5000);
 
 let messages;
 
 function renderMessages() {
     const content = document.querySelector(".content");
+    const last_message_before = document.querySelector(".message:last-child");
     content.innerHTML = "";
 
     for ( let i = 0; i<messages.length; i++) {
@@ -46,6 +47,11 @@ function renderMessages() {
         else {
             content.innerHTML += `<div class="message"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> para <span class="name">${messages[i].to}</span>: ${messages[i].text}</div>`
         }
+    }
+
+    const last_message_after = document.querySelector(".message:last-child");
+    if ( last_message_before === null || last_message_after.innerHTML !== last_message_before.innerHTML ) {
+        last_message_after.scrollIntoView();
     }
 }
 

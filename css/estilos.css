@@ -37,6 +37,7 @@ body {
     padding: 15px 10px;
     margin-bottom: 5px;
     border-radius: 2px;
+    word-wrap: break-word;
 }
 
 .message .time {
