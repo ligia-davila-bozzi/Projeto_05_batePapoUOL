@@ -9,12 +9,12 @@ let user;
 
     const request = axios.post(URL_USERS, {name: user});
     request.then(loadMessages);
-    request.catch(errorWarning);
+    request.catch(errorLogin);
 }
 
-function errorWarning(error) {
+function errorLogin(error) {
     if ( error.response.status === 400 ) {
-        alert("Nome já em uso, tente outro nome!");
+        alert("Tente outro nome!");
         login();
     }
     else {
@@ -65,3 +65,23 @@ function loadMessages() {
 }
 
 setInterval(loadMessages, 3000);
+
+function sendMessage() {
+    const input = document.querySelector("input");
+    const text = input.value;
+
+    if ( text !== "" ) {
+        input.value = "";
+        const new_message = { from: user, to: "Todos", text, type: "message" };
+
+        const request = axios.post(URL_MESSAGES, new_message);
+
+        request.then(loadMessages);
+        request.catch(errorSending);
+    }
+}
+
+function errorSending() {
+    alert("Você não está mais logado!");
+    window.location.reload();
+}
