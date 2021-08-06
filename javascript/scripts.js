@@ -36,17 +36,15 @@ function renderizarMensagens(objeto) {
     const conteudo = document.querySelector(".conteudo");
     conteudo.innerHTML = "";
 
-    const status = ``
-
     for ( let i = 0; i<mensagens.length; i++) {
-        if ( mensagens[i].type === "status" ) {
+        if ( mensagens[i].type === "private_message" && mensagens[i].to === usuario ) {
+            conteudo.innerHTML += `<div class="mensagem reservada"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> reservadamente para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
+        }
+        else if ( mensagens[i].type === "status" ) {
             conteudo.innerHTML += `<div class="mensagem status"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> ${mensagens[i].text}</div>`
         }
-        else if ( mensagens[i].type === "message" ) {
-            conteudo.innerHTML += `<div class="mensagem"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
-        }
         else {
-            conteudo.innerHTML += `<div class="mensagem reservada"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> reservadamente para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
+            conteudo.innerHTML += `<div class="mensagem"><span class="hora">(${mensagens[i].time})</span><span class="nome">${mensagens[i].from}</span> para <span class="nome">${mensagens[i].to}</span>: ${mensagens[i].text}</div>`
         }
     }
 }
