@@ -80,8 +80,6 @@ body {
     border: none;
     color: #000000;
     font-size: 18px;
-    resize: none;
-    vertical-align: middle;
 }
 
 .rodape input::placeholder {
