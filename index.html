@@ -17,10 +17,46 @@
 <body>
     <div class="top">
         <img src="assets/imagens/batepapo.png" />
-        <ion-icon name="people"></ion-icon>
+        <ion-icon name="people" onclick="messageConfig();"></ion-icon>
     </div>
 
     <div class="content"></div>
+
+    <div class="sidebar hidden">
+        <div class="back" onclick="messageConfig();"></div>
+        <div class="message-config">
+            <div class="title">Escolha um contato para enviar mensagem:</div>
+            <div class="participants-list">
+                <div class="participant">
+                    <ion-icon class="person-icon" name="people"></ion-icon>
+                    <span class="name">Todos</span>
+
+                    <ion-icon class="check-icon" name="checkmark-sharp"></ion-icon>
+                </div>
+                <div class="participant">
+                    <ion-icon class="person-icon" name="person-circle"></ion-icon>
+                    <span class="name">João</span>
+                </div>
+                <div class="participant">
+                    <ion-icon class="person-icon" name="person-circle"></ion-icon>
+                    <span class="name">Maria</span>
+                </div>
+            </div>
+            <div class="title">Escolha a visibilidade:</div>
+            <div class="visibility">
+                <div class="visibility-options">
+                    <ion-icon class="lock-icon" name="lock-open"></ion-icon>
+                    <span class="message">Público</span>
+
+                    <ion-icon class="check-icon" name="checkmark-sharp"></ion-icon>
+                </div>
+                <div class="visibility-options">
+                    <ion-icon class="lock-icon" name="lock-closed"></ion-icon>
+                    <span class="private_message">Reservadamente</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="bottom">
         <input type="text" placeholder="Escreva aqui...">

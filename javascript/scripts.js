@@ -4,7 +4,7 @@ const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/statu
 
 let user;
 
-function login() {
+/*function login() {
     user = prompt("Qual é o seu nome?");
 
     const request = axios.post(URL_USERS, {name: user});
@@ -28,7 +28,7 @@ function sendStatus() {
     const request = axios.post(URL_STATUS, {name: user});
 }
 
-setInterval(sendStatus, 5000);
+setInterval(sendStatus, 5000);*/
 
 let messages;
 
@@ -90,4 +90,12 @@ function sendMessage() {
 function errorSending() {
     alert("Você não está mais logado!");
     window.location.reload();
+}
+
+function messageConfig() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("hidden");
+
+    const body = document.querySelector("body");
+    body.classList.toggle("lock-scroll");
 }
