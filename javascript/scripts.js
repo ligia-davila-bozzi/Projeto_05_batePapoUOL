@@ -116,7 +116,9 @@ function loadParticipantsList() {
             selected_class = "";
         }
 
-        participants_list.innerHTML += `<div class="participant ${selected_class}" onclick="select(this)"><ion-icon class="person-icon" name="person-circle"></ion-icon><span class="name">${participants[i].name}</span><ion-icon class="check-icon" name="checkmark-sharp"></div>`
+        if ( participants[i].name !== user ) {
+            participants_list.innerHTML += `<div class="participant ${selected_class}" onclick="select(this)"><ion-icon class="person-icon" name="person-circle"></ion-icon><span class="name">${participants[i].name}</span><ion-icon class="check-icon" name="checkmark-sharp"></div>`
+        }
     }
 
     const checked = document.querySelector(".participant.selected");
@@ -160,9 +162,27 @@ function select(element) {
     }
 
     element.classList.add("selected");
+    changeWarning();
 }
 
 function clearCheck(element) {
     const check = element.querySelector(".selected");
     check.classList.remove("selected");
+}
+
+function changeWarning() {
+    const input_area = document.querySelector(".message-input");
+    const warning = input_area.querySelector(".warning");
+
+    if ( new_message.to !== "Todos" ) {
+        input_area.classList.add("warning-text");
+        warning.innerHTML = `Enviando para ${new_message.to}`;
+        if ( new_message.type === "private_message" ) {
+            warning.innerHTML += " (reservadamente)";
+        }
+    }
+    else {
+        input_area.classList.remove("warning-text");
+        warning.innerHTML = "";
+    }
 }
