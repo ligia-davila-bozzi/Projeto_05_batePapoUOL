@@ -1,14 +1,14 @@
 const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
-const URL_USERS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
+const URL_PARTICIPANTS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status"
 
 let user;
 
-/*function login() {
+function login() {
     user = prompt("Qual é o seu nome?");
 
-    const request = axios.post(URL_USERS, {name: user});
-    request.then(loadMessages);
+    const request = axios.post(URL_PARTICIPANTS, {name: user});
+    request.then(successfulLogin);
     request.catch(errorLogin);
 }
 
@@ -24,15 +24,15 @@ function errorLogin(error) {
 
 login();
 
-function sendStatus() {
+function updateStatus() {
     const request = axios.post(URL_STATUS, {name: user});
 }
 
-setInterval(sendStatus, 5000);*/
+setInterval(updateStatus, 5000);
 
 let messages;
 
-function renderMessages() {
+function loadMessages() {
     const content = document.querySelector(".content");
     const last_message_before = document.querySelector(".message:last-child");
     content.innerHTML = "";
@@ -55,22 +55,22 @@ function renderMessages() {
     }
 }
 
-function getMessages(object) {
+function updateMessages(object) {
     messages = object.data;
     
-    renderMessages();
+    loadMessages();
 }
 
-function loadMessages() {
+function getMessages() {
     const promise = axios.get(URL_MESSAGES);
 
-    promise.then(getMessages);
+    promise.then(updateMessages);
     promise.catch(function () {
         alert("Ocorreu algum erro, tente novamente!")
     })
 }
 
-setInterval(loadMessages, 3000);
+setInterval(getMessages, 3000);
 
 function sendMessage() {
     const input = document.querySelector("input");
@@ -78,11 +78,11 @@ function sendMessage() {
 
     if ( text !== "" ) {
         input.value = "";
-        const new_message = { from: user, to: "Todos", text, type: "message" };
+        new_message.text = text;
 
         const request = axios.post(URL_MESSAGES, new_message);
 
-        request.then(loadMessages);
+        request.then(getMessages);
         request.catch(errorSending);
     }
 }
@@ -98,4 +98,71 @@ function messageConfig() {
 
     const body = document.querySelector("body");
     body.classList.toggle("lock-scroll");
+}
+
+let participants;
+
+function loadParticipantsList() {
+    const participants_list = document.querySelector(".participants-list");
+    participants_list.innerHTML = `<div class="participant" onclick="select(this)"><ion-icon class="person-icon" name="people"></ion-icon><span class="name">Todos</span><ion-icon class="check-icon" name="checkmark-sharp"></ion-icon></div>`;
+
+    let selected_class;
+
+    for ( let i = 0; i<participants.length; i++) {
+        if ( participants[i].name === new_message.to )  {
+            selected_class = "selected";
+        }
+        else {
+            selected_class = "";
+        }
+
+        participants_list.innerHTML += `<div class="participant ${selected_class}" onclick="select(this)"><ion-icon class="person-icon" name="person-circle"></ion-icon><span class="name">${participants[i].name}</span><ion-icon class="check-icon" name="checkmark-sharp"></div>`
+    }
+
+    const checked = document.querySelector(".participant.selected");
+    if ( checked === null ) {
+        const first_participant = document.querySelector(".participant");
+        first_participant.classList.add("selected");
+        select(first_participant);
+    }
+}
+
+function updateParticipantsList(list) {
+    participants = list.data;
+
+    loadParticipantsList()
+}
+
+function getParticipantsList() {
+    const promise = axios.get(URL_PARTICIPANTS);
+
+    promise.then(updateParticipantsList);
+}
+
+function successfulLogin() {
+    getMessages();
+    getParticipantsList();
+}
+
+setInterval(getParticipantsList, 10000);
+
+let new_message = { from: user, to: "Todos", text: "", type: "message" }
+
+function select(element) {
+    const message_type = element.parentNode;
+    clearCheck(message_type);
+
+    if ( message_type.classList.contains("participants-list") ) {
+        new_message.to = element.innerText;
+    }
+    else {
+        new_message.type = element.querySelector("span").className;
+    }
+
+    element.classList.add("selected");
+}
+
+function clearCheck(element) {
+    const check = element.querySelector(".selected");
+    check.classList.remove("selected");
 }

@@ -26,33 +26,19 @@
         <div class="back" onclick="messageConfig();"></div>
         <div class="message-config">
             <div class="title">Escolha um contato para enviar mensagem:</div>
-            <div class="participants-list">
-                <div class="participant">
-                    <ion-icon class="person-icon" name="people"></ion-icon>
-                    <span class="name">Todos</span>
-
-                    <ion-icon class="check-icon" name="checkmark-sharp"></ion-icon>
-                </div>
-                <div class="participant">
-                    <ion-icon class="person-icon" name="person-circle"></ion-icon>
-                    <span class="name">João</span>
-                </div>
-                <div class="participant">
-                    <ion-icon class="person-icon" name="person-circle"></ion-icon>
-                    <span class="name">Maria</span>
-                </div>
-            </div>
+            <div class="participants-list"></div>
             <div class="title">Escolha a visibilidade:</div>
             <div class="visibility">
-                <div class="visibility-options">
+                <div class="option selected" onclick="select(this);">
                     <ion-icon class="lock-icon" name="lock-open"></ion-icon>
                     <span class="message">Público</span>
 
                     <ion-icon class="check-icon" name="checkmark-sharp"></ion-icon>
                 </div>
-                <div class="visibility-options">
+                <div class="option" onclick="select(this);">
                     <ion-icon class="lock-icon" name="lock-closed"></ion-icon>
                     <span class="private_message">Reservadamente</span>
+                    <ion-icon class="check-icon" name="checkmark-sharp"></ion-icon>
                 </div>
             </div>
         </div>

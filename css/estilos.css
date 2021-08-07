@@ -137,13 +137,18 @@ body {
     color: #28bb25;
     position: absolute;
     right: 0;
+    opacity: 0;
+}
+
+.message-config .selected .check-icon {
+    opacity: 100;
 }
 
 .message-config span {
     font-size: 16px;
 }
 
-.participants-list div, .visibility div {
+.participants-list .participant, .visibility .option {
     position: relative;
     display: flex;
     align-items: center;
