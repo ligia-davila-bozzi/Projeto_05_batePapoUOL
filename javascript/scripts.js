@@ -186,3 +186,9 @@ function changeWarning() {
         warning.innerHTML = "";
     }
 }
+
+document.onkeyup = function (e) {
+    if ( e.which === 13 ) {
+        sendMessage();
+    }
+}
