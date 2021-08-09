@@ -2,33 +2,7 @@ const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/mes
 const URL_PARTICIPANTS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status"
 
-let user;
-
-function login() {
-    user = prompt("Qual é o seu nome?");
-
-    const request = axios.post(URL_PARTICIPANTS, {name: user});
-    request.then(successfulLogin);
-    request.catch(errorLogin);
-}
-
-function errorLogin(error) {
-    if ( error.response.status === 400 ) {
-        alert("Tente outro nome!");
-        login();
-    }
-    else {
-        alert("Tente novmente!");
-    }
-}
-
-login();
-
-function updateStatus() {
-    const request = axios.post(URL_STATUS, {name: user});
-}
-
-setInterval(updateStatus, 5000);
+let new_message = { from: "", to: "Todos", text: "", type: "message" };
 
 let messages;
 
@@ -38,7 +12,7 @@ function loadMessages() {
     content.innerHTML = "";
 
     for ( let i = 0; i<messages.length; i++) {
-        if ( messages[i].type === "private_message" && (messages[i].to === user || messages[i].from === user) ) {
+        if ( messages[i].type === "private_message" && (messages[i].to === new_message.from || messages[i].from === new_message.from) ) {
             content.innerHTML += `<div class="message private"><span class="time">(${messages[i].time})</span><span class="name">${messages[i].from}</span> reservadamente para <span class="name">${messages[i].to}</span>: ${messages[i].text}</div>`
         }
         else if ( messages[i].type === "status" ) {
@@ -70,34 +44,8 @@ function getMessages() {
     })
 }
 
-setInterval(getMessages, 3000);
-
-function sendMessage() {
-    const input = document.querySelector("input");
-    const text = input.value;
-
-    if ( text !== "" ) {
-        input.value = "";
-        new_message.text = text;
-
-        const request = axios.post(URL_MESSAGES, new_message);
-
-        request.then(getMessages);
-        request.catch(errorSending);
-    }
-}
-
-function errorSending() {
-    alert("Você não está mais logado!");
-    window.location.reload();
-}
-
-function messageConfig() {
-    const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.toggle("hidden");
-
-    const body = document.querySelector("body");
-    body.classList.toggle("lock-scroll");
+function updateStatus() {
+    const request = axios.post(URL_STATUS, {name: new_message.from});
 }
 
 let participants;
@@ -116,7 +64,7 @@ function loadParticipantsList() {
             selected_class = "";
         }
 
-        if ( participants[i].name !== user ) {
+        if ( participants[i].name !== new_message.from ) {
             participants_list.innerHTML += `<div class="participant ${selected_class}" onclick="select(this)"><ion-icon class="person-icon" name="person-circle"></ion-icon><span class="name">${participants[i].name}</span><ion-icon class="check-icon" name="checkmark-sharp"></div>`
         }
     }
@@ -142,27 +90,67 @@ function getParticipantsList() {
 }
 
 function successfulLogin() {
+    const login_screen = document.querySelector(".login-screen");
+    login_screen.classList.add("hidden");
+
+    const message_screen = document.querySelector(".content");
+    message_screen.classList.remove("hidden");
+
     getMessages();
+    updateStatus();
     getParticipantsList();
+    setInterval(getMessages, 3000);
+    setInterval(updateStatus, 5000);
+    setInterval(getParticipantsList, 10000);
 }
 
-setInterval(getParticipantsList, 10000);
-
-let new_message = { from: user, to: "Todos", text: "", type: "message" }
-
-function select(element) {
-    const message_type = element.parentNode;
-    clearCheck(message_type);
-
-    if ( message_type.classList.contains("participants-list") ) {
-        new_message.to = element.innerText;
+function errorLogin(error) {
+    if ( error.response.status === 400 ) {
+        alert("Tente outro nome!");
+        login();
     }
     else {
-        new_message.type = element.querySelector("span").className;
+        alert("Tente novmente!");
     }
+}
 
-    element.classList.add("selected");
-    changeWarning();
+function login() {
+    const user = document.querySelector(".login-screen input").value;
+
+    if ( user !== "" ) {
+        new_message.from = user;
+        const request = axios.post(URL_PARTICIPANTS, {name: new_message.from});
+        request.then(successfulLogin);
+        request.catch(errorLogin);
+    }
+}
+
+function errorSending() {
+    alert("Você não está mais logado!");
+    window.location.reload();
+}
+
+function sendMessage() {
+    const input = document.querySelector(".bottom input");
+    const text = input.value;
+
+    if ( text !== "" ) {
+        input.value = "";
+        new_message.text = text;
+
+        const request = axios.post(URL_MESSAGES, new_message);
+
+        request.then(getMessages);
+        request.catch(errorSending);
+    }
+}
+
+function messageConfig() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("hidden");
+
+    const body = document.querySelector("body");
+    body.classList.toggle("lock-scroll");
 }
 
 function clearCheck(element) {
@@ -185,6 +173,21 @@ function changeWarning() {
         input_area.classList.remove("warning-text");
         warning.innerHTML = "";
     }
+}
+
+function select(element) {
+    const message_type = element.parentNode;
+    clearCheck(message_type);
+
+    if ( message_type.classList.contains("participants-list") ) {
+        new_message.to = element.innerText;
+    }
+    else {
+        new_message.type = element.querySelector("span").className;
+    }
+
+    element.classList.add("selected");
+    changeWarning();
 }
 
 document.onkeyup = function (e) {
